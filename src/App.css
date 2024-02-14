@@ -4,6 +4,10 @@
     box-sizing: border-box;
 }
 
+body {
+    background-color: #061621;
+    color: white
+}
 
 .card {
     background-color: #061621;
@@ -15,18 +19,96 @@
 }
 
 .main-container {
-    background-color: #061621;
     height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-.image-container {
+.logo-container {
     height: 500px;
     width: 500px;
     background-image: url('./components/logo.png');
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
+}
+
+.left {
+    height: 600px;
+    width: 400px;
+    padding: 20px;
+    /* background-color: red; */
+    border: 2px solid white;
+    border-radius: 10px;
+}
+
+.right {
+    height: 600px;
+    width: 800px;
+    padding: 0px 10px;
+    /* background-color: green; */
+}
+
+.user-image-container {
+    height: 200px;
+    width: 200px;
+    margin: 20px auto;
+    background-image: url('./components/user.png');
+    background-size: cover;
+    border-radius: 50%;
+
+}
+
+.welcome {
+    font-size: 40px;
+}
+
+.name {
+    color: blue;
+    font-weight: 800;
+}
+
+.message {
+    height: 200px;
+    /* width: 200px; */
+    /* background-color: aqua; */
+    text-align: center;
+    padding: 20px;
+}
+
+.upper {
+    height: 200px;
+    border: 2px solid white;
+    /* background-color: red; */
+    display: flex;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+.progressbar {
+    padding: 20px;
+    width: 500px;
+}
+
+.upload-container {
+    height: 380px;
+    border: 2px solid white;
+    border-radius: 10px;
+    /* background-color: blue; */
+}
+
+.upload {
+    color: black;
+    height: 50px;
+    background-color: rgb(149, 247, 247);
+    padding: 5px 20px;
+    margin: 10px 10px;
+    border-radius: 10px;
+    position: relative;
+}
+
+.align-right {
+    position: absolute;
+    right: 10px;
 }

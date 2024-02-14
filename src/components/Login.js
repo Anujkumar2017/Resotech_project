@@ -4,7 +4,7 @@ import Form from './Form';
 const Login = () => {
     return (
         <div className='main-container'>
-            <div className='image-container'>
+            <div className='logo-container'>
             </div>
             <Form />
         </div>

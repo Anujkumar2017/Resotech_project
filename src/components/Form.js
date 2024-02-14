@@ -1,13 +1,16 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const Form = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const nevigate = useNavigate();
 
     function submit(e) {
         e.preventDefault();
         // console.log("hi")
         console.log(email, password);
+        nevigate("/dashboard");
     }
 
     function togglePasswordVisibity() {
