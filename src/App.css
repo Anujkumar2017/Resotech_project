@@ -98,6 +98,16 @@ body {
     /* background-color: blue; */
 }
 
+.main-upload {
+    color: black;
+    height: 50px;
+    background-color: rgb(152, 152, 243);
+    padding: 5px 20px;
+    margin: 10px 10px;
+    border-radius: 10px;
+    position: relative;
+}
+
 .upload {
     color: black;
     height: 50px;
@@ -111,4 +121,26 @@ body {
 .align-right {
     position: absolute;
     right: 10px;
+}
+
+.form-popup {
+    display: none;
+    position: absolute;
+    top: 50px;
+    left: 270px;
+    border: 2px solid white;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.form-container {
+    width: 800px;
+    height: 500px;
+    padding: 50px;
+    background-color: #061621;
+    overflow-y: scroll;
+}
+
+.form-container::-webkit-scrollbar {
+    display: none;
 }
