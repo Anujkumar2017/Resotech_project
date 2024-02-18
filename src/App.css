@@ -4,11 +4,6 @@
     box-sizing: border-box;
 }
 
-body {
-    background-color: #061621;
-    color: white
-}
-
 .card {
     background-color: #061621;
     color: white;
@@ -25,10 +20,19 @@ body {
     justify-content: center;
 }
 
+.login {
+    background-color: #061621;
+}
+
+.forgot-password{
+    background-color: #061621;
+}
+
 .logo-container {
     height: 500px;
     width: 500px;
-    background-image: url('./components/logo.png');
+    background-color: #061621;
+    background-image: url('./components/images/logo.png');
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
@@ -38,8 +42,8 @@ body {
     height: 600px;
     width: 400px;
     padding: 20px;
-    /* background-color: red; */
-    border: 2px solid white;
+    background-color: rgb(201, 253, 253);
+    border: 2px solid black;
     border-radius: 10px;
 }
 
@@ -47,40 +51,43 @@ body {
     height: 600px;
     width: 800px;
     padding: 0px 10px;
-    /* background-color: green; */
+    /* background-color: pink; */
 }
 
 .user-image-container {
     height: 200px;
     width: 200px;
     margin: 20px auto;
-    background-image: url('./components/user.png');
+    background-image: url('./components/images/user.png');
     background-size: cover;
+    border: 2px solid white;
     border-radius: 50%;
-
 }
 
 .welcome {
-    font-size: 40px;
+    font-size: 30px;
+    text-align: center;
 }
 
 .name {
-    color: blue;
+    color: rgb(54, 54, 233);
     font-weight: 800;
 }
 
 .message {
     height: 200px;
-    /* width: 200px; */
-    /* background-color: aqua; */
-    text-align: center;
     padding: 20px;
+}
+
+.message-p2 {
+    color: gray;
+    text-align: left;
 }
 
 .upper {
     height: 200px;
-    border: 2px solid white;
-    /* background-color: red; */
+    border: 2px solid black;
+    /* background-color: rgb(148, 247, 247); */
     display: flex;
     border-radius: 10px;
     margin-bottom: 20px;
@@ -93,7 +100,7 @@ body {
 
 .upload-container {
     height: 380px;
-    border: 2px solid white;
+    border: 2px solid black;
     border-radius: 10px;
     /* background-color: blue; */
 }
@@ -126,21 +133,28 @@ body {
 .form-popup {
     display: none;
     position: absolute;
-    top: 50px;
-    left: 270px;
-    border: 2px solid white;
+    top: 0px;
+    right: 10px;
+    background-color: white;
+    border: 2px solid black;
     border-radius: 10px;
     overflow: hidden;
 }
 
 .form-container {
-    width: 800px;
-    height: 500px;
+    width: 50vw;
+    height: 99vh;
     padding: 50px;
-    background-color: #061621;
+    
     overflow-y: scroll;
 }
 
 .form-container::-webkit-scrollbar {
     display: none;
+}
+
+.cross-image {
+    position: absolute;
+    top: 10px;
+    right: 10px;
 }
