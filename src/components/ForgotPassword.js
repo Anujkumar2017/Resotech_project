@@ -6,6 +6,13 @@ const Login = () => {
     const [password, setPassword] = useState("");
     const nevigate = useNavigate();
 
+    let isPasswordChange = false;
+
+    function getOTP(e) {
+        e.preventDefault();
+        nevigate('/changePassword')
+    }
+
     function submit(e) {
         e.preventDefault();
         // console.log("hi")
@@ -27,14 +34,20 @@ const Login = () => {
             <div className='logo-container'>
             </div>
             <div className='card'>
-                <p className='h3 mb-3'>Forgot Password</p>
-                <form>
+                {isPasswordChange ? <form>
+                    <p className='h3 mb-3'> Forgot Password</p>
+                    <div className="mb-3">
+                        <label htmlFor="inputEmailId" className="form-label">Email Id</label>
+                        <input type="text" className="form-control" id="inputEmailId" aria-describedby="emailHelp" />
+                    </div>
 
+                    <button className="btn btn-primary" onClick={(e) => { getOTP(e) }}>Get OTP</button>
+                </form > : <form>
+                    <p className='h3 mb-3'> Please Update Password</p>
                     <div className="mb-3">
                         <label htmlFor="inputNewPassword" className="form-label">New Password</label>
                         <input type="text" className="form-control" id="inputNewPassword" aria-describedby="emailHelp" value={email} onChange={e => setEmail(e.target.value)} />
                     </div>
-
                     <div className="mb-3">
                         <label htmlFor="inputConfirmPassword" className="form-label">Confirm Password</label>
                         <input type="password" className="form-control" id="inputConfirmPassword" value={password}
@@ -48,7 +61,8 @@ const Login = () => {
                         </div>
                     </div>
                     <button className="btn btn-primary" onClick={(e) => submit(e)}>Submit</button>
-                </form >
+                </form >}
+
             </div >
         </div>
     )

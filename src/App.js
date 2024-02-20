@@ -1,8 +1,10 @@
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import './App.css';
+
+import Login from './components/Login';
 import Dashboard from './components/Dashboard';
 import ForgotPassword from './components/ForgotPassword';
-import Login from './components/Login';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import ChangePassword from './components/changePassword';
 
 function App() {
   return (
@@ -11,6 +13,7 @@ function App() {
         <Route path='/' element={<Login />} />
         <Route path='/dashboard' element={<Dashboard />} />
         <Route path='/forgotPassword' element={<ForgotPassword />} />
+        <Route path='/changePassword' element={<ChangePassword />} />
       </Routes>
     </BrowserRouter>
   );
