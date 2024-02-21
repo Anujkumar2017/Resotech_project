@@ -1,10 +1,21 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+
 import Cross from './images/cross.png';
 import { CircularProgressbar } from 'react-circular-progressbar';
-import 'react-circular-progressbar/dist/styles.css';
+
 
 const Dashboard = () => {
+
     const percentage = 66;
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const token = localStorage.getItem('token');
+        if (!token) {
+            navigate('/');
+        }
+    });
 
     function openForm() {
         document.getElementById("myForm").style.display = "block";
@@ -180,7 +191,7 @@ const Dashboard = () => {
                     <form className="form-container" id="form-4" style={{ display: "none" }}>
                         <img className='cross-image' height="20px" width="20px" src={Cross} alt="cross" onClick={closeForm} />
                         <h1>Agreement Form</h1>
-                        <a class="btn btn-outline-primary mb-3 mt-3 fw-bold" href="path_to_file"
+                        <a className="btn btn-outline-primary mb-3 mt-3 fw-bold" href="path_to_file"
                             download="Agreement_Form">
                             Download Agreement Form
                         </a>
