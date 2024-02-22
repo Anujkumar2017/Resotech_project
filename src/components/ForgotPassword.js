@@ -1,27 +1,89 @@
 import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
-const Login = () => {
+const ForgotPassword = () => {
+
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const nevigate = useNavigate();
+    const [confirmPassword, setConfirmPassword] = useState("");
+    const [OTP, setOTP] = useState("");
 
-    let isPasswordChange = false;
+    const [OTPreceived, setOTPreceived] = useState(false);
+    const [statusMessage, setStatusMessage] = useState("");
 
-    function getOTP(e) {
+    const navigate = useNavigate();
+
+    async function getOTP(e) {
         e.preventDefault();
-        nevigate('/changePassword')
+        setStatusMessage("");
+
+        try {
+            const response = await axios.post('https://appdev.resotechsolutions.in/onboarding/forget-password/generate-otp',
+                {
+                    'email': email
+                }
+            );
+
+            const data = response.data;
+            console.log(data);
+
+            // email does not exist
+            if (data.status.statusCode == 3)
+                setStatusMessage(data.status.statusMessage);
+
+            // Credential correct    
+            if (data.status.statusCode == 1) {
+                console.log('email sent');
+                setStatusMessage(data.status.statusMessage);
+                setOTPreceived(true);
+            }
+
+        } catch (error) {
+            console.log(error);
+        }
     }
 
-    function submit(e) {
+    async function submit(e) {
         e.preventDefault();
-        // console.log("hi")
-        console.log(email, password);
-        nevigate("/dashboard");
+        setStatusMessage("");
+
+        if (password == confirmPassword) {
+            try {
+                const response = await axios.post('https://appdev.resotechsolutions.in/onboarding/forget-password/validate-otp-password',
+                    {
+                        'email': email,
+                        'otp': OTP,
+                        'password': password
+                    }
+                );
+
+                const data = response.data;
+                console.log(data);
+
+                // OTP does not match
+                if (data.status.statusCode == -1)
+                    setStatusMessage(`Password Changed login to continue`);
+
+                // Credential correct    
+                if (data.status.statusCode == 1) {
+                    console.log('password change successfully');
+                    setStatusMessage(`Password Changed login to continue`);
+
+                    // goto login
+                    navigate('/');
+                }
+
+            } catch (error) {
+                console.log(error);
+            }
+        } else {
+            setStatusMessage(`Passwords does not match`);
+        }
     }
 
     function togglePasswordVisibity() {
-        var x = document.getElementById('inputPassword1');
+        var x = document.getElementById('inputPassword');
         if (x.type == 'password') {
             x.type = 'text';
         } else {
@@ -29,43 +91,61 @@ const Login = () => {
         }
     }
 
+    const emailForm = (
+        <form onSubmit={(e) => getOTP(e)}>
+            <p className='h3 mb-3'> Forgot Password</p>
+            <div className="mb-3">
+                <label htmlFor="inputEmailId" className="form-label">Email Id</label>
+                <input type="text" className="form-control" id="inputEmailId" value={email} onChange={(e) => setEmail(e.target.value)} required />
+            </div>
+            <p className='h6 text-danger mb-3 small'>{statusMessage}</p>
+            <button type='submit' className="btn btn-primary">Get OTP</button>
+        </form >
+    );
+
+    const changePasswordForm = (
+        <form onSubmit={(e) => { submit(e) }}>
+            <p className='h3 mb-3'>Change Password</p>
+            <div className="mb-3">
+                <label htmlFor="inputEmailId" className="form-label">Email Id</label>
+                <input type="text" className="form-control" id="inputEmailId" value={email} disabled />
+            </div>
+
+            <div className="mb-3">
+                <label htmlFor="inputOTP" className="form-label">Email-OTP</label>
+                <input type="number" className="form-control" id="inputOTP" placeholder='Enter Email-OTP' value={OTP} onChange={(e) => { setOTP(e.target.value) }} required />
+            </div>
+
+            <div className="mb-3">
+                <label htmlFor="inputPassword" className="form-label">New Password</label>
+                <input type="password" className="form-control" id="inputPassword" placeholder='Enter New Password' value={password} onChange={(e) => setPassword(e.target.value)} required />
+                <div className="form-check">
+                    <input className="form-check-input" type="checkbox" onClick={togglePasswordVisibity} id="flexCheckDefault" />
+                    <label className="form-check-label" htmlFor="flexCheckDefault">
+                        <span className='small'>Show Password</span>
+                    </label>
+                </div>
+            </div>
+
+            <div className="mb-3">
+                <label htmlFor="inputConfirmPassword" className="form-label">Confirm Password</label>
+                <input type="password" className="form-control" id="inputConfirmPassword" placeholder='Enter Confirm Password' value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} required />
+            </div>
+            <p className='h6 text-danger mb-3 small'>{statusMessage}</p>
+            <button type='submit' className="btn btn-primary">Submit</button>
+        </form >
+    );
+
+
     return (
         <div className='main-container forgot-password'>
             <div className='logo-container'>
             </div>
             <div className='card'>
-                {isPasswordChange ? <form>
-                    <p className='h3 mb-3'> Forgot Password</p>
-                    <div className="mb-3">
-                        <label htmlFor="inputEmailId" className="form-label">Email Id</label>
-                        <input type="text" className="form-control" id="inputEmailId" aria-describedby="emailHelp" />
-                    </div>
-
-                    <button className="btn btn-primary" onClick={(e) => { getOTP(e) }}>Get OTP</button>
-                </form > : <form>
-                    <p className='h3 mb-3'> Please Update Password</p>
-                    <div className="mb-3">
-                        <label htmlFor="inputNewPassword" className="form-label">New Password</label>
-                        <input type="text" className="form-control" id="inputNewPassword" aria-describedby="emailHelp" value={email} onChange={e => setEmail(e.target.value)} />
-                    </div>
-                    <div className="mb-3">
-                        <label htmlFor="inputConfirmPassword" className="form-label">Confirm Password</label>
-                        <input type="password" className="form-control" id="inputConfirmPassword" value={password}
-                            onChange={(e) => setPassword(e.target.value)} />
-
-                        <div className="form-check">
-                            <input className="form-check-input" type="checkbox" onClick={togglePasswordVisibity} id="flexCheckDefault" />
-                            <label className="form-check-label" htmlFor="flexCheckDefault">
-                                <span className='small'>Show Password</span>
-                            </label>
-                        </div>
-                    </div>
-                    <button className="btn btn-primary" onClick={(e) => submit(e)}>Submit</button>
-                </form >}
-
+                {OTPreceived ? changePasswordForm : emailForm}
             </div >
         </div>
     )
 }
 
-export default Login;
+export default ForgotPassword;

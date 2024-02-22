@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, Link} from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
 
 const Login = () => {
 
-    const [userId, setUserId] = useState("");
+    const [userName, setUserName] = useState("");
     const [password, setPassword] = useState("");
     const [statusMessage, setStatusMessage] = useState("");
 
     const navigate = useNavigate();
+
 
     useEffect(() => {
         const token = localStorage.getItem('token');
@@ -23,28 +24,42 @@ const Login = () => {
         try {
             const response = await axios.post('https://appdev.resotechsolutions.in/onboarding/login', {}, {
                 headers: {
-                    'username': userId,
+                    'username': userName,
                     'password': password
                 }
             });
+
             const data = response.data;
             console.log(data);
 
             // User does not exist
             if (data.status.statusCode == 3)
-                setStatusMessage(`User does not exist with user-id ${userId}`);
+                setStatusMessage(data.status.statusMessage);
 
             // Invalid password
             if (data.status.statusCode == -1)
-                setStatusMessage(`Invalid Password`);
+                setStatusMessage(data.status.statusMessage);
 
             // Credential correct    
             if (data.status.statusCode == 1) {
+                console.log('login successfull');
 
                 //setting token to local storage
                 localStorage.setItem('token', data.data.token);
 
-                // Go to dashboard
+                // First time login
+                if (!data.data.passwordUpdated) {
+                    console.log(data.data.passwordUpdated);
+
+                    navigate('/updatePassword', {
+                        state: {
+                            userName: data.data.username
+                        }
+
+                    })
+                }
+
+                // goto dashboard
                 navigate("/dashboard");
             }
 
@@ -70,8 +85,8 @@ const Login = () => {
                 <p className='h3 mb-3'>Login</p>
                 <form onSubmit={(e) => { submit(e) }}>
                     <div className="mb-3">
-                        <label htmlFor="inputUserId" className="form-label">User Id</label>
-                        <input type="text" className="form-control" id="inputUserId" value={userId} onChange={e => setUserId(e.target.value)} required />
+                        <label htmlFor="inputUserName" className="form-label">Username</label>
+                        <input type="text" className="form-control" id="inputUserName" value={userName} onChange={e => setUserName(e.target.value)} required />
                     </div>
                     <div className="mb-3">
                         <label htmlFor="inputPassword" className="form-label">Password</label>

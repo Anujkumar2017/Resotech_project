@@ -4,16 +4,23 @@ import './App.css';
 import Login from './components/Login';
 import Dashboard from './components/Dashboard';
 import ForgotPassword from './components/ForgotPassword';
-import ChangePassword from './components/changePassword';
+import UpdatePassword from './components/UpdatePassword';
+
 
 function App() {
+  function logout() {
+    console.log("logout");
+    localStorage.removeItem('token');
+  }
+
   return (
     <BrowserRouter>
+      <button className='btn btn-danger' style={{position: 'absolute', right:'0px'}} onClick={logout}>Logout</button>
       <Routes>
         <Route path='/' element={<Login />} />
         <Route path='/dashboard' element={<Dashboard />} />
         <Route path='/forgotPassword' element={<ForgotPassword />} />
-        <Route path='/changePassword' element={<ChangePassword />} />
+        <Route path='/updatePassword' element={<UpdatePassword />} />
       </Routes>
     </BrowserRouter>
   );
