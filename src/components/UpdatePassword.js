@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useLocation, Link, Navigate } from 'react-router-dom';
 import axios from 'axios';
+import Spinner from './Spinner';
 
 const UpdatePassword = () => {
 
+    const [loading, setLoading] = useState(false);
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [statusMessage, setStatusMessage] = useState("");
 
-    const nevigate = useNavigate();
+    const navigate = useNavigate();
     const location = useLocation();
 
     const { userName } = location.state;
@@ -19,6 +21,7 @@ const UpdatePassword = () => {
         setStatusMessage("");
 
         if (password == confirmPassword) {
+            setLoading(true);
             try {
                 const response = await axios.post('https://appdev.resotechsolutions.in/onboarding/update-password', {}, {
                     headers: {
@@ -27,6 +30,8 @@ const UpdatePassword = () => {
                         'token': localStorage.getItem('token')
                     }
                 });
+
+                setLoading(false);
 
                 const data = response.data;
                 console.log(data);
@@ -48,8 +53,10 @@ const UpdatePassword = () => {
                     //clear token
                     localStorage.removeItem('token');
 
-                    // goto login
-                    nevigate('/');
+                    setTimeout(() => {
+                        // Goto login
+                        navigate('/');
+                    }, 1000);
                 }
 
 
@@ -95,6 +102,7 @@ const UpdatePassword = () => {
                         <input type="password" className="form-control" id="inputConfirmPassword" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} required />
                     </div>
                     <p className='h6 text-danger mb-3 small'>{statusMessage}</p>
+                    {loading && <Spinner />}
                     <button type='submit' className="btn btn-primary" >Submit</button>
                 </form >
             </div>

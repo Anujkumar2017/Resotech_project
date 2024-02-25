@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
+import Spinner from './Spinner';
 
 const Login = () => {
 
+    const [loading, setLoading] = useState(false);
     const [userName, setUserName] = useState("");
     const [password, setPassword] = useState("");
     const [statusMessage, setStatusMessage] = useState("");
@@ -20,7 +22,10 @@ const Login = () => {
 
     async function submit(e) {
         e.preventDefault();
+        
+        setLoading(true);
         setStatusMessage("");
+        
         try {
             const response = await axios.post('https://appdev.resotechsolutions.in/onboarding/login', {}, {
                 headers: {
@@ -28,6 +33,8 @@ const Login = () => {
                     'password': password
                 }
             });
+
+            setLoading(false);
 
             const data = response.data;
             console.log(data);
@@ -47,22 +54,20 @@ const Login = () => {
                 //setting token to local storage
                 localStorage.setItem('token', data.data.token);
 
+                console.log('passwordUpdated: ' + data.data.passwordUpdated);
+
                 // First time login
                 if (!data.data.passwordUpdated) {
-                    console.log(data.data.passwordUpdated);
-
                     navigate('/updatePassword', {
                         state: {
                             userName: data.data.username
                         }
-
                     })
+                } else {
+                    // goto dashboard
+                    navigate("/dashboard");
                 }
-
-                // goto dashboard
-                navigate("/dashboard");
             }
-
         } catch (error) {
             console.log(error);
         }
@@ -101,6 +106,7 @@ const Login = () => {
                         <Link to='/forgotPassword' style={{ textDecoration: 'none' }}><p className="text-danger small">Forget Password</p></Link>
                     </div>
                     <p className='h6 text-danger mb-3 small'>{statusMessage}</p>
+                    {loading && <Spinner />}
                     <button className="btn btn-primary" type='submit'>Submit</button>
                 </form >
             </div >

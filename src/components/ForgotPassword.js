@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import Spinner from './Spinner';
 
 const ForgotPassword = () => {
 
+    const [loading, setLoading] = useState(false);
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
@@ -16,6 +18,8 @@ const ForgotPassword = () => {
 
     async function getOTP(e) {
         e.preventDefault();
+
+        setLoading(true);
         setStatusMessage("");
 
         try {
@@ -24,6 +28,8 @@ const ForgotPassword = () => {
                     'email': email
                 }
             );
+
+            setLoading(false);
 
             const data = response.data;
             console.log(data);
@@ -49,6 +55,7 @@ const ForgotPassword = () => {
         setStatusMessage("");
 
         if (password == confirmPassword) {
+            setLoading(true);
             try {
                 const response = await axios.post('https://appdev.resotechsolutions.in/onboarding/forget-password/validate-otp-password',
                     {
@@ -58,20 +65,24 @@ const ForgotPassword = () => {
                     }
                 );
 
+                setLoading(false);
+
                 const data = response.data;
                 console.log(data);
 
                 // OTP does not match
                 if (data.status.statusCode == -1)
-                    setStatusMessage(`Password Changed login to continue`);
+                    setStatusMessage(`OTP does not match`);
 
                 // Credential correct    
                 if (data.status.statusCode == 1) {
                     console.log('password change successfully');
                     setStatusMessage(`Password Changed login to continue`);
 
-                    // goto login
-                    navigate('/');
+                    setTimeout(() => {
+                        // Goto login
+                        navigate('/');
+                    }, 1000);
                 }
 
             } catch (error) {
@@ -99,6 +110,8 @@ const ForgotPassword = () => {
                 <input type="text" className="form-control" id="inputEmailId" value={email} onChange={(e) => setEmail(e.target.value)} required />
             </div>
             <p className='h6 text-danger mb-3 small'>{statusMessage}</p>
+            {loading && <Spinner />}
+            <Link to='/' style={{ textDecoration: 'none' }}><button className="me-3 btn btn-primary">Login</button></Link>
             <button type='submit' className="btn btn-primary">Get OTP</button>
         </form >
     );
@@ -132,6 +145,7 @@ const ForgotPassword = () => {
                 <input type="password" className="form-control" id="inputConfirmPassword" placeholder='Enter Confirm Password' value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} required />
             </div>
             <p className='h6 text-danger mb-3 small'>{statusMessage}</p>
+            {loading && <Spinner />}
             <button type='submit' className="btn btn-primary">Submit</button>
         </form >
     );

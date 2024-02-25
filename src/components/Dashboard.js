@@ -1,21 +1,46 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-
+import axios from 'axios';
 import Cross from './images/cross.png';
 import { CircularProgressbar } from 'react-circular-progressbar';
 
-
 const Dashboard = () => {
-
-    const percentage = 66;
-    const navigate = useNavigate();
 
     useEffect(() => {
         const token = localStorage.getItem('token');
         if (!token) {
             navigate('/');
         }
-    });
+        fetchData();
+    }, []);
+
+    const navigate = useNavigate();
+    const [userData, setUserData] = useState({});
+
+
+    async function fetchData() {
+        try {
+            const response = await axios.post('https://appdev.resotechsolutions.in/onboarding/landing', {}, {
+                headers: {
+                    'token': localStorage.getItem('token')
+                }
+            });
+
+            const data = response.data;
+            console.log(data);
+
+            // Valid Token
+            if (data.status.statusCode == 1) {
+                console.log("Data Fetched & Valid token");
+                setUserData(data.data);
+                console.log(userData);
+            }
+
+        } catch (error) {
+            console.log(error);
+        }
+
+    }
 
     function openForm() {
         document.getElementById("myForm").style.display = "block";
@@ -44,7 +69,7 @@ const Dashboard = () => {
     return (
         <div className="main-container">
             <div className="left">
-                <p className='welcome'>Welcome <span className='name'>Anuj!</span></p>
+                <p className='welcome'>Welcome <span className='name'>{userData.firstName}</span></p>
                 <div className="user-image-container"></div>
                 <div className="message">Welcome to our team! Your expertise is invaluable. We'll provide support as you familiarize with our codebase and processes. Collaboration is key – feel free to ask questions and share ideas. Let's innovate and make a positive impact together. Welcome to our developer community!</div>
             </div>
@@ -55,7 +80,7 @@ const Dashboard = () => {
                         <p className='message-p2'>We're here to support you every step of the way. To make your onboarding process seamless, we invite you to complete your profile. This will help us tailor our support and resources to ensure you thrive in your new position. We're eager to dive into this journey with you and learn more about your background and interests!</p>
                     </div>
                     <div className="progressbar">
-                        <CircularProgressbar value={percentage} text={`${percentage}%`} />
+                        <CircularProgressbar value={userData["Percentage Complete"]} text={`${userData["Percentage Complete"]}%`} />
                     </div>
                 </div>
                 <div className="upload-container">
@@ -72,7 +97,7 @@ const Dashboard = () => {
                         <button type="button" className="btn btn-danger align-right">Incomplete</button>
                     </div>
                     <div className="upload">Aadhar Card
-                        <button type="button" className="btn btn-danger align-right">Incomplete</button>
+                        <button type="button" className="btn btn-success align-right">{userData.Aadhar ? 'Incomplete' : 'Complete'}</button>
                     </div>
                     <div className="upload">Agreement Form
                         <button type="button" className="btn btn-danger align-right">Incomplete</button>
