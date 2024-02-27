@@ -17,6 +17,240 @@ const Dashboard = () => {
     const navigate = useNavigate();
     const [userData, setUserData] = useState({});
 
+    /****** Personal Details form ******/
+    let personalInfoRules = [
+        {
+            field: "TEXT_INPUT",
+            data: {
+                name: 'name',
+                label: 'Name',
+                placeholder: 'Enter Name',
+                maxLength: 30,
+                isRequired: true,
+                badMessage: 'Enter a valid Name'
+            }
+        },
+        {
+            field: "DROPDOWN",
+            data: {
+                options: [
+                    { label: 'Male', value: 'male' },
+                    { label: 'Female', value: 'female' },
+                    { label: 'Others', value: 'others' }
+                ],
+                name: 'gender',
+                label: 'Gender',
+                placeholder: 'Select Gender',
+                isRequired: true,
+                badMessage: 'Please select a gender'
+            }
+        },
+        {
+            field: "TEXT_INPUT",
+            data: {
+                name: 'contact',
+                label: 'Contact No.',
+                placeholder: 'Enter Contact No.',
+                maxLength: 10,
+                keyboardType: 'numeric',
+                isRequired: true,
+                badMessage: 'Enter a valid Contact No.'
+            }
+        },
+        {
+            field: "TEXT_INPUT",
+            data: {
+                name: 'address1',
+                label: 'Address Line 1',
+                placeholder: 'Enter House No. and Area',
+                isRequired: true,
+                badMessage: 'Please enter House No. and Area'
+            }
+        },
+        {
+            field: "TEXT_INPUT",
+            data: {
+                name: 'address2',
+                label: 'Address Line 2',
+                placeholder: 'Enter State',
+                isRequired: true,
+                badMessage: 'Please enter State'
+            }
+        },
+        {
+            field: "TEXT_INPUT",
+            data: {
+                name: 'pincode',
+                label: 'Pin Code',
+                placeholder: 'Enter Pincode',
+                maxLength: 6,
+                keyboardType: 'numeric',
+                isRequired: true,
+                badMessage: 'Please enter Pin Code'
+            }
+        },
+
+    ];
+
+    /****** Educational Qualifications  Form ******/
+    let educationalInfoRules = [
+        {
+            field: 'SUBHEADING',
+            data: {
+                label: 'Graduation'
+            }
+        },
+        {
+            field: "TEXT_INPUT",
+            data: {
+                name: 'graduation',
+                label: 'Degree Name',
+                placeholder: 'Eg. B.Tech',
+                maxLength: 30,
+                badMessage: 'Enter a Degree Name'
+            }
+        },
+        {
+            field: "TEXT_INPUT",
+            data: {
+                name: 'graduationYear',
+                label: 'Year of Completion',
+                placeholder: 'Eg. 2019',
+                keyboardType: 'numeric',
+                maxLength: 4,
+                badMessage: 'Enter a valid Year'
+            }
+        },
+        {
+            field: "TEXT_INPUT",
+            data: {
+                name: 'graduationInstitute',
+                label: 'Institute Name',
+                placeholder: 'Enter Institute Name',
+                maxLength: 30,
+                badMessage: 'Enter a valid Institute Name'
+            }
+        },
+        {
+            field: "TEXT_INPUT",
+            data: {
+                name: 'graduationCGPA',
+                label: 'CGPA',
+                placeholder: 'Eg 9.20',
+                keyboardType: 'numeric',
+                maxLength: 5,
+                badMessage: 'Enter a valid CGPA'
+            }
+        },
+        {
+            field: 'SUBHEADING',
+            data: {
+                label: 'Secondary Education'
+            }
+        },
+        {
+            field: "TEXT_INPUT",
+            data: {
+                name: 'secondaryInstitute',
+                label: 'Institute Name',
+                placeholder: 'Enter Institute Name',
+                maxLength: 30,
+                isRequired: true,
+                badMessage: 'Invalid Secondary Institution Name'
+            }
+        },
+        {
+            field: "TEXT_INPUT",
+            data: {
+                name: 'secondaryYear',
+                label: 'Year of Completion',
+                placeholder: 'Eg. 2019',
+                maxLength: 4,
+                keyboardType: 'numeric',
+                isRequired: true,
+                badMessage: 'Invalid secondary education passing year'
+            }
+        },
+        {
+            field: "TEXT_INPUT",
+            data: {
+                name: 'secondaryStream',
+                label: 'Stream',
+                placeholder: 'Eg. Science',
+                maxLength: 30,
+                isRequired: true,
+                badMessage: 'Invalid stream name'
+            }
+        },
+        {
+            field: "TEXT_INPUT",
+            data: {
+                name: 'secondaryCGPA',
+                label: 'CGPA',
+                placeholder: 'Eg 9.20',
+                maxLength: 5,
+                keyboardType: 'numeric',
+                isRequired: true,
+                badMessage: 'Invalid secondary education CGPA'
+            }
+        },
+    ]
+
+    /****** PAN Details Form ******/
+    let panInfoRules = [
+        {
+            field: "TEXT_INPUT",
+            data: {
+                name: 'panNumber',
+                label: 'PAN Number',
+                placeholder: 'Eg: QAXCE0891D',
+                maxLength: 10,
+                isRequired: true,
+                badMessage: 'Invalid PAN Number'
+            }
+        },
+        {
+            field: "INFORMATION",
+            data: {
+                title: 'Upload PAN Card',
+                description: '(.pdf, .jpg, .jpeg files only)'
+            }
+        },
+        {
+            field: "UPLOAD_BUTTON",
+            data: {
+                name: 'panUrl'
+            }
+        },
+    ];
+
+    /****** Aadhar Details Form ******/
+    let aadharInfoRules = [
+        {
+            field: "TEXT_INPUT",
+            data: {
+                name: 'aadharNumber',
+                label: 'Aadhar Number',
+                placeholder: 'Eg: QAXCE0891D',
+                maxLength: 12,
+                isRequired: true,
+                badMessage: 'Invalid Aadhar Number'
+            }
+        },
+        {
+            field: "INFORMATION",
+            data: {
+                title: 'Upload Aadhar',
+                description: '(.pdf, .jpg, .jpeg files only)'
+            }
+        },
+        {
+            field: "UPLOAD_BUTTON",
+            data: {
+                name: 'aadharUrl'
+            }
+        },
+    ];
 
     async function fetchData() {
         try {
@@ -109,7 +343,24 @@ const Dashboard = () => {
                         <img className='cross-image' height="20px" width="20px" src={Cross} alt="cross" onClick={closeForm} />
                         <h1>Personal Information</h1>
 
-                        <div className="mb-3 fw-bold">
+                        {personalInfoRules.map((ele) => {
+                            return (ele.field === 'TEXT_INPUT') ? (
+                                <div className="mb-3 fw-bold">
+                                    <label className="form-label">{ele.data.label}</label>
+                                    <input type='text' className="form-control" name={ele.data.name} maxLength={ele.data.maxLength} placeholder={ele.data.placeholder} required={ele.data.isRequired} />
+                                </div>) : (ele.field === 'DROPDOWN') ? (
+                                    <>
+                                        <label className="mb-3 fw-bold" >{ele.data.label}</label>
+                                        <select className="form-control custom-select mb-3" name={ele.data.name} required={ele.data.isRequired}>
+                                            <option defaultValue="Select Gender">Select Gender</option>
+                                            {ele.data.options.map((option) => {
+                                                return <option value={option.value} >{option.label}</option>
+                                            })}
+                                        </select>
+                                    </>) : null;
+                        })}
+
+                        {/*<div className="mb-3 fw-bold">
                             <label htmlFor="inputName" className="form-label">Name</label>
                             <input type="text" className="form-control" id="inputName" placeholder='Enter Name' />
                         </div>
@@ -141,7 +392,7 @@ const Dashboard = () => {
                         <div className="mb-3 fw-bold">
                             <label htmlFor="inputPinCode" className="form-label">Pin Code</label>
                             <input type="number" className="form-control" id="inputPinCode" placeholder='Enter Pin Code' />
-                        </div>
+                        </div>*/}
 
                         <button type="submit" className="btn btn-primary" onClick={(e) => nextForm(e, 0)}>Next</button>
                     </form>
@@ -149,8 +400,17 @@ const Dashboard = () => {
                     <form className="form-container" id="form-1" style={{ display: "none" }}>
                         <img className='cross-image' height="20px" width="20px" src={Cross} alt="cross" onClick={closeForm} />
                         <p className='h1'>Education</p>
-                        <p className='h6'>Graduation</p>
-                        <div className="mb-3 fw-bold">
+
+                        {educationalInfoRules.map((ele) => {
+                            return (ele.field === 'TEXT_INPUT') ? (
+                                <div className="mb-3 fw-bold">
+                                    <label className="form-label">{ele.data.label}</label>
+                                    <input type='text' className="form-control" name={ele.data.name} maxLength={ele.data.maxLength} placeholder={ele.data.placeholder} required={ele.data.isRequired} />
+                                </div>
+                            ) : (ele.field === 'SUBHEADING') ? (<p className='h6 text-danger'>{ele.data.label}</p>) : null;
+                        })}
+
+                        {/* <div className="mb-3 fw-bold">
                             <label htmlFor="inputCollege" className="form-label">College Name</label>
                             <input type="text" className="form-control" id="inputCollege" placeholder='Enter College Name' />
                         </div>
@@ -173,7 +433,7 @@ const Dashboard = () => {
                         <div className="mb-3 fw-bold">
                             <label htmlFor="inputYOP" className="form-label">Year of Completion</label>
                             <input type="text" className="form-control" id="inputYOP" placeholder='Eg. 2023' />
-                        </div>
+                        </div> */}
                         <button type="button" className="btn btn-danger" onClick={(e) => prevForm(e, 1)}>Back</button>
                         <button type="submit" className="btn btn-primary" onClick={(e) => nextForm(e, 1)}>Next</button>
                     </form>
@@ -182,7 +442,22 @@ const Dashboard = () => {
                         <img className='cross-image' height="20px" width="20px" src={Cross} alt="cross" onClick={closeForm} />
                         <p className='h1'>PAN Card</p>
 
-                        <div className="mb-3 fw-bold">
+                        {panInfoRules.map((ele) => {
+                            return (ele.field === 'TEXT_INPUT') ? (
+                                <div className="mb-3 fw-bold">
+                                    <label className="form-label">{ele.data.label}</label>
+                                    <input type="text" className="form-control" name={ele.data.name} maxLength={ele.data.maxLength} placeholder={ele.data.placeholder} required={ele.data.isRequired} />
+                                </div>
+                            ) : (ele.field === 'INFORMATION') ? (
+                                <div className="mb-3 fw-bold">
+                                    <label className="form-label">{ele.data.title}</label>
+                                    <input type="file" className="form-control" id="inputPan" />
+                                    <p className='fw-normal small'>{ele.data.description}</p>
+                                </div>
+                            ) : null;
+                        })}
+
+                        {/* <div className="mb-3 fw-bold">
                             <label htmlFor="inputPanNo" className="form-label">PAN No</label>
                             <input type="text" className="form-control" id="inputPanNo" placeholder='Enter PAN No.' />
                         </div>
@@ -190,7 +465,7 @@ const Dashboard = () => {
                         <div className="mb-3 fw-bold">
                             <label htmlFor="inputPan" className="form-label">PAN Card</label>
                             <input type="file" className="form-control" id="inputPan" />
-                        </div>
+                        </div> */}
 
                         <button type="button" className="btn btn-danger" onClick={(e) => prevForm(e, 2)}>Back</button>
                         <button type="submit" className="btn btn-primary" onClick={(e) => nextForm(e, 2)}>Next</button>
@@ -200,7 +475,22 @@ const Dashboard = () => {
                         <img className='cross-image' height="20px" width="20px" src={Cross} alt="cross" onClick={closeForm} />
                         <p className='h1'>Aadhar Card</p>
 
-                        <div className="mt-3 mb-3 fw-bold">
+                        {aadharInfoRules.map((ele) => {
+                            return (ele.field === 'TEXT_INPUT') ? (
+                                <div className="mb-3 fw-bold">
+                                    <label className="form-label">{ele.data.label}</label>
+                                    <input type="text" className="form-control" name={ele.data.name} maxLength={ele.data.maxLength} placeholder={ele.data.placeholder} required={ele.data.isRequired} />
+                                </div>
+                            ) : (ele.field === 'INFORMATION') ? (
+                                <div className="mb-3 fw-bold">
+                                    <label className="form-label">{ele.data.title}</label>
+                                    <input type="file" className="form-control" id="inputPan" />
+                                    <p className='fw-normal small'>{ele.data.description}</p>
+                                </div>
+                            ) : null;
+                        })}
+
+                        {/* <div className="mt-3 mb-3 fw-bold">
                             <label htmlFor="inputAadharNo" className="form-label">Aadhar No</label>
                             <input type="text" className="form-control" id="inputAadharNo" placeholder='Enter Aadhar No.' />
                         </div>
@@ -208,7 +498,7 @@ const Dashboard = () => {
                         <div className="mb-3 fw-bold">
                             <label htmlFor="inputAadhar" className="form-label">Aadhar Card</label>
                             <input type="file" className="form-control" id="inputAadhar" />
-                        </div>
+                        </div> */}
 
                         <button type="button" className="btn btn-danger" onClick={(e) => prevForm(e, 3)}>Back</button>
                         <button type="submit" className="btn btn-primary" onClick={(e) => nextForm(e, 3)}>Next</button>

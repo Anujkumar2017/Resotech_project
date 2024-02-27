@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useNavigate, useLocation, Link, Navigate } from 'react-router-dom';
 import axios from 'axios';
 import Spinner from './Spinner';
@@ -69,8 +69,8 @@ const UpdatePassword = () => {
         }
     }
 
-    function togglePasswordVisibity() {
-        var x = document.getElementById('inputPassword');
+    function togglePasswordVisibity(target) {
+        var x = document.getElementById(target);
         if (x.type == 'password') {
             x.type = 'text';
         } else {
@@ -90,7 +90,7 @@ const UpdatePassword = () => {
                         <input type="password" className="form-control" id="inputPassword" value={password} onChange={e => setPassword(e.target.value)} required />
 
                         <div className="form-check">
-                            <input className="form-check-input" type="checkbox" onClick={togglePasswordVisibity} id="flexCheckDefault" />
+                            <input className="form-check-input" type="checkbox" onClick={() => togglePasswordVisibity('inputPassword')} />
                             <label className="form-check-label" htmlFor="flexCheckDefault">
                                 <span className='small'>Show Password</span>
                             </label>
@@ -100,6 +100,12 @@ const UpdatePassword = () => {
                     <div className="mb-3">
                         <label htmlFor="inputConfirmPassword" className="form-label">Confirm Password</label>
                         <input type="password" className="form-control" id="inputConfirmPassword" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} required />
+                        <div className="form-check">
+                            <input className="form-check-input" type="checkbox" onClick={() => togglePasswordVisibity('inputConfirmPassword')} />
+                            <label className="form-check-label" htmlFor="flexCheckDefault">
+                                <span className='small'>Show Password</span>
+                            </label>
+                        </div>
                     </div>
                     <p className='h6 text-danger mb-3 small'>{statusMessage}</p>
                     {loading && <Spinner />}

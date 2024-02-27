@@ -11,7 +11,7 @@ const ForgotPassword = () => {
     const [confirmPassword, setConfirmPassword] = useState("");
     const [OTP, setOTP] = useState("");
 
-    const [OTPreceived, setOTPreceived] = useState(false);
+    const [OTPreceived, setOTPreceived] = useState(true);
     const [statusMessage, setStatusMessage] = useState("");
 
     const navigate = useNavigate();
@@ -54,7 +54,7 @@ const ForgotPassword = () => {
         e.preventDefault();
         setStatusMessage("");
 
-        if (password == confirmPassword) {
+        if (password === confirmPassword) {
             setLoading(true);
             try {
                 const response = await axios.post('https://appdev.resotechsolutions.in/onboarding/forget-password/validate-otp-password',
@@ -93,8 +93,9 @@ const ForgotPassword = () => {
         }
     }
 
-    function togglePasswordVisibity() {
-        var x = document.getElementById('inputPassword');
+    function togglePasswordVisibity(target) {
+
+        var x = document.getElementById(target);
         if (x.type == 'password') {
             x.type = 'text';
         } else {
@@ -107,7 +108,7 @@ const ForgotPassword = () => {
             <p className='h3 mb-3'> Forgot Password</p>
             <div className="mb-3">
                 <label htmlFor="inputEmailId" className="form-label">Email Id</label>
-                <input type="text" className="form-control" id="inputEmailId" value={email} onChange={(e) => setEmail(e.target.value)} required />
+                <input type="email" className="form-control" id="inputEmailId" value={email} onChange={(e) => setEmail(e.target.value)} required />
             </div>
             <p className='h6 text-danger mb-3 small'>{statusMessage}</p>
             {loading && <Spinner />}
@@ -121,19 +122,20 @@ const ForgotPassword = () => {
             <p className='h3 mb-3'>Change Password</p>
             <div className="mb-3">
                 <label htmlFor="inputEmailId" className="form-label">Email Id</label>
-                <input type="text" className="form-control" id="inputEmailId" value={email} disabled />
+                <input type="email" className="form-control" id="inputEmailId" value={email} disabled />
             </div>
 
             <div className="mb-3">
                 <label htmlFor="inputOTP" className="form-label">Email-OTP</label>
-                <input type="number" className="form-control" id="inputOTP" placeholder='Enter Email-OTP' value={OTP} onChange={(e) => { setOTP(e.target.value) }} required />
+                <input type="text" className="form-control mb-2" id="inputOTP" value={OTP} onChange={(e) => { setOTP(e.target.value) }} required />
+                <p className="text-danger small" onClick={(e) => getOTP(e)}>Resend OTP</p>
             </div>
 
             <div className="mb-3">
                 <label htmlFor="inputPassword" className="form-label">New Password</label>
-                <input type="password" className="form-control" id="inputPassword" placeholder='Enter New Password' value={password} onChange={(e) => setPassword(e.target.value)} required />
+                <input type="password" className="form-control" id="inputPassword" value={password} minLength={8} onChange={(e) => setPassword(e.target.value)} required />
                 <div className="form-check">
-                    <input className="form-check-input" type="checkbox" onClick={togglePasswordVisibity} id="flexCheckDefault" />
+                    <input className="form-check-input" type="checkbox" onClick={() => togglePasswordVisibity('inputPassword')} />
                     <label className="form-check-label" htmlFor="flexCheckDefault">
                         <span className='small'>Show Password</span>
                     </label>
@@ -142,7 +144,13 @@ const ForgotPassword = () => {
 
             <div className="mb-3">
                 <label htmlFor="inputConfirmPassword" className="form-label">Confirm Password</label>
-                <input type="password" className="form-control" id="inputConfirmPassword" placeholder='Enter Confirm Password' value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} required />
+                <input type="password" className="form-control" id="inputConfirmPassword" value={confirmPassword} minLength={8} onChange={(e) => setConfirmPassword(e.target.value)} required />
+                <div className="form-check">
+                    <input className="form-check-input" type="checkbox" onClick={() => togglePasswordVisibity('inputConfirmPassword')} />
+                    <label className="form-check-label" htmlFor="flexCheckDefault">
+                        <span className='small'>Show Password</span>
+                    </label>
+                </div>
             </div>
             <p className='h6 text-danger mb-3 small'>{statusMessage}</p>
             {loading && <Spinner />}

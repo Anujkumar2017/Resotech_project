@@ -22,10 +22,10 @@ const Login = () => {
 
     async function submit(e) {
         e.preventDefault();
-        
+
         setLoading(true);
         setStatusMessage("");
-        
+
         try {
             const response = await axios.post('https://appdev.resotechsolutions.in/onboarding/login', {}, {
                 headers: {
@@ -33,7 +33,7 @@ const Login = () => {
                     'password': password
                 }
             });
-
+            
             setLoading(false);
 
             const data = response.data;
@@ -73,8 +73,8 @@ const Login = () => {
         }
     }
 
-    function togglePasswordVisibity() {
-        var x = document.getElementById('inputPassword');
+    function togglePasswordVisibity(target) {
+        var x = document.getElementById(target);
         if (x.type == 'password') {
             x.type = 'text';
         } else {
@@ -98,7 +98,7 @@ const Login = () => {
                         <input type="password" className="form-control" id="inputPassword" value={password}
                             onChange={(e) => setPassword(e.target.value)} required />
                         <div className="form-check">
-                            <input className="form-check-input" type="checkbox" onClick={togglePasswordVisibity} id="flexCheckDefault" />
+                            <input className="form-check-input" type="checkbox" onClick={() => togglePasswordVisibity('inputPassword')} id="flexCheckDefault" />
                             <label className="form-check-label" htmlFor="flexCheckDefault">
                                 <span className='small'>Show Password</span>
                             </label>
