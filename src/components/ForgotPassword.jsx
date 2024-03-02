@@ -11,7 +11,7 @@ const ForgotPassword = () => {
     const [confirmPassword, setConfirmPassword] = useState("");
     const [OTP, setOTP] = useState("");
 
-    const [OTPreceived, setOTPreceived] = useState(true);
+    const [OTPreceived, setOTPreceived] = useState(false);
     const [statusMessage, setStatusMessage] = useState("");
 
     const navigate = useNavigate();
@@ -112,7 +112,7 @@ const ForgotPassword = () => {
             </div>
             <p className='h6 text-danger mb-3 small'>{statusMessage}</p>
             {loading && <Spinner />}
-            <Link to='/' style={{ textDecoration: 'none' }}><button className="me-3 btn btn-primary">Login</button></Link>
+            <Link to='/' style={{ textDecoration: 'none' }}><button className="me-3 btn btn-primary">Back</button></Link>
             <button type='submit' className="btn btn-primary">Get OTP</button>
         </form >
     );
