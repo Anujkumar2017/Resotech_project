@@ -2,13 +2,13 @@ import React, { useState } from 'react';
 import { useNavigate, useLocation, Link, Navigate } from 'react-router-dom';
 import axios from 'axios';
 import Spinner from './Spinner';
+import { Slide, toast } from 'react-toastify';
 
 const UpdatePassword = () => {
 
     const [loading, setLoading] = useState(false);
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
-    const [statusMessage, setStatusMessage] = useState("");
 
     const navigate = useNavigate();
     const location = useLocation();
@@ -18,8 +18,6 @@ const UpdatePassword = () => {
     async function submit(e) {
         e.preventDefault();
 
-        setStatusMessage("");
-
         if (password == confirmPassword) {
             setLoading(true);
             try {
@@ -27,10 +25,11 @@ const UpdatePassword = () => {
                     headers: {
                         'username': userName,
                         'password': password,
-                        'token': localStorage.getItem('token')
+                        'token': localStorage.getItem('token'),
                     }
                 });
 
+                console.log(data);
                 setLoading(false);
 
                 const data = response.data;
@@ -38,17 +37,35 @@ const UpdatePassword = () => {
 
                 // User does not exist
                 if (data.status.statusCode == 3)
-                    setStatusMessage(data.status.statusMessage);
+                    toast.error(data.status.statusMessage, {
+                        position: "top-center",
+                        autoClose: 3000,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        transition: Slide,
+                    });
 
                 // Invalid token
                 if (data.status.statusCode == -1)
-                    setStatusMessage(data.status.statusMessage);
+                    toast.error(data.status.statusMessage, {
+                        position: "top-center",
+                        autoClose: 3000,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        transition: Slide,
+                    });
 
                 // Credential correct
                 if (data.status.statusCode == 1) {
                     console.log('Update Successfull');
 
-                    setStatusMessage(data.status.statusMessage);
+                    toast.success(data.status.statusMessage, {
+                        position: "top-center",
+                        autoClose: 3000,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        transition: Slide,
+                    });
 
                     //clear token
                     localStorage.removeItem('token');
@@ -65,7 +82,13 @@ const UpdatePassword = () => {
             }
         }
         else {
-            setStatusMessage(`Passwords does not match`);
+            toast.error('Passwords not matched!', {
+                position: "top-center",
+                autoClose: 3000,
+                closeOnClick: true,
+                pauseOnHover: true,
+                transition: Slide,
+            });
         }
     }
 
@@ -86,10 +109,10 @@ const UpdatePassword = () => {
                 <form onSubmit={submit}>
                     <p className='h3 mb-3'> Please Update Password</p>
                     <div className="mb-3">
-                        <label htmlFor="inputPassword" className="form-label">New Password</label>
+                        <label htmlFor="inputPassword" className="form-label fw-bold">New Password</label>
                         <input type="password" className="form-control" id="inputPassword" value={password} onChange={e => setPassword(e.target.value)} required />
 
-                        <div className="form-check">
+                        <div className="form-check fw-light">
                             <input className="form-check-input" type="checkbox" onClick={() => togglePasswordVisibity('inputPassword')} />
                             <label className="form-check-label" htmlFor="flexCheckDefault">
                                 <span className='small'>Show Password</span>
@@ -98,16 +121,15 @@ const UpdatePassword = () => {
                     </div>
 
                     <div className="mb-3">
-                        <label htmlFor="inputConfirmPassword" className="form-label">Confirm Password</label>
+                        <label htmlFor="inputConfirmPassword" className="form-label fw-bold">Confirm Password</label>
                         <input type="password" className="form-control" id="inputConfirmPassword" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} required />
-                        <div className="form-check">
+                        <div className="form-check fw-light">
                             <input className="form-check-input" type="checkbox" onClick={() => togglePasswordVisibity('inputConfirmPassword')} />
                             <label className="form-check-label" htmlFor="flexCheckDefault">
                                 <span className='small'>Show Password</span>
                             </label>
                         </div>
                     </div>
-                    <p className='h6 text-danger mb-3 small'>{statusMessage}</p>
                     {loading && <Spinner />}
                     <button type='submit' className="btn btn-primary" >Submit</button>
                 </form >

@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
+import { Slide, toast } from 'react-toastify';
+
 import Spinner from './Spinner';
 
 const Login = () => {
@@ -8,10 +10,8 @@ const Login = () => {
     const [loading, setLoading] = useState(false);
     const [userName, setUserName] = useState("");
     const [password, setPassword] = useState("");
-    const [statusMessage, setStatusMessage] = useState("");
 
     const navigate = useNavigate();
-
 
     useEffect(() => {
         const token = localStorage.getItem('token');
@@ -24,7 +24,6 @@ const Login = () => {
         e.preventDefault();
 
         setLoading(true);
-        setStatusMessage("");
 
         try {
             const response = await axios.post('https://appdev.resotechsolutions.in/onboarding/login', {}, {
@@ -33,19 +32,32 @@ const Login = () => {
                     'password': password
                 }
             });
-            
+
             setLoading(false);
 
             const data = response.data;
             console.log(data);
 
+
             // User does not exist
             if (data.status.statusCode == 3)
-                setStatusMessage(data.status.statusMessage);
+                toast.error(data.status.statusMessage, {
+                    position: "top-center",
+                    autoClose: 3000,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    transition: Slide,
+                });
 
             // Invalid password
             if (data.status.statusCode == -1)
-                setStatusMessage(data.status.statusMessage);
+                toast.error(data.status.statusMessage, {
+                    position: "top-center",
+                    autoClose: 3000,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    transition: Slide,
+                });
 
             // Credential correct    
             if (data.status.statusCode == 1) {
@@ -64,8 +76,18 @@ const Login = () => {
                         }
                     })
                 } else {
-                    // goto dashboard
-                    navigate("/dashboard");
+                    toast.success(data.status.statusMessage, {
+                        position: "top-center",
+                        autoClose: 1500,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        transition: Slide,
+                    });
+
+                    setTimeout(() => {
+                        // Goto dashboard
+                        navigate('/dashboard');
+                    }, 1000);
                 }
             }
         } catch (error) {
@@ -89,12 +111,12 @@ const Login = () => {
             <div className='card'>
                 <p className='h3 mb-3'>Login</p>
                 <form onSubmit={(e) => { submit(e) }}>
-                    <div className="mb-3">
+                    <div className="mb-3 fw-bold">
                         <label htmlFor="inputUserName" className="form-label">Username</label>
                         <input type="text" className="form-control" id="inputUserName" value={userName} onChange={e => setUserName(e.target.value)} required />
                     </div>
                     <div className="mb-3">
-                        <label htmlFor="inputPassword" className="form-label">Password</label>
+                        <label htmlFor="inputPassword" className="form-label fw-bold">Password</label>
                         <input type="password" className="form-control" id="inputPassword" value={password}
                             onChange={(e) => setPassword(e.target.value)} required />
                         <div className="form-check">
@@ -105,7 +127,6 @@ const Login = () => {
                         </div>
                         <Link to='/forgotPassword' style={{ textDecoration: 'none' }}><p className="text-danger small">Forget Password</p></Link>
                     </div>
-                    <p className='h6 text-danger mb-3 small'>{statusMessage}</p>
                     {loading && <Spinner />}
                     <button className="btn btn-primary" type='submit'>Submit</button>
                 </form >

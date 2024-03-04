@@ -3,7 +3,7 @@ import React from 'react';
 const AgreementInfoForm = (props) => {
     const { agreementInfoRules, nextForm, prevForm } = props;
     return (
-        <form className="form-container" id="form-4" style={{ display: "none" }}>
+        <form className="form-container" id="form-4" onSubmit={(e) => nextForm(e, 4)} style={{ display: "none" }}>
             <h1>Agreement Form</h1>
 
             {agreementInfoRules.map((ele) => {
@@ -20,12 +20,15 @@ const AgreementInfoForm = (props) => {
                         <p className='fw-normal small stick-to-title'>{ele.data.description}</p>
                     </div>
                 ) : (ele.field === "UPLOAD_BUTTON") ? (
-                    <input type="file" className="form-control mb-3" name={ele.data.name} required={ele.required} />
+                    <>
+                        <input type="file" className="form-control mb-3" name={ele.data.name} required={ele.data.isRequired} />
+                        <p className='text-danger small stick-to-title'>{ele.data.badMessage}</p>
+                    </>
                 ) : null;
             })}
 
             <button type="button" className="btn btn-danger" onClick={(e) => prevForm(e, 4)}>Back</button>
-            <button type="submit" className="btn btn-primary" onClick={(e) => nextForm(e, 4)}>Next</button>
+            <button type="submit" className="btn btn-primary">Next</button>
         </form>
     )
 }

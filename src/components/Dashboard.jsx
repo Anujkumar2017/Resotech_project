@@ -18,7 +18,7 @@ const Dashboard = () => {
         if (!token) {
             navigate('/');
         }
-        // fetchData();
+        fetchData();
     }, []);
 
     const navigate = useNavigate();
@@ -201,7 +201,8 @@ const Dashboard = () => {
                 badMessage: 'Invalid secondary education CGPA'
             }
         },
-    ]
+    ];
+
 
     /****** PAN Details Form ******/
     let panInfoRules = [
@@ -226,7 +227,9 @@ const Dashboard = () => {
         {
             field: "UPLOAD_BUTTON",
             data: {
-                name: 'panUrl'
+                name: 'panUploadData',
+                isRequired: true,
+                badMessage: 'Please upload PAN Card'
             }
         },
     ];
@@ -238,7 +241,7 @@ const Dashboard = () => {
             data: {
                 name: 'aadharNumber',
                 label: 'Aadhar Number',
-                placeholder: 'Eg: QAXCE0891D',
+                placeholder: 'Eg: 123456781234',
                 maxLength: 12,
                 isRequired: true,
                 badMessage: 'Invalid Aadhar Number'
@@ -254,7 +257,9 @@ const Dashboard = () => {
         {
             field: "UPLOAD_BUTTON",
             data: {
-                name: 'aadharUrl'
+                name: 'aadharUploadData',
+                isRequired: true,
+                badMessage: 'Please upload Aadhar Card'
             }
         },
     ];

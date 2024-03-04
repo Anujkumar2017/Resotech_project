@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Spinner from './Spinner';
+import { Slide, toast } from 'react-toastify';
 
 const ForgotPassword = () => {
 
@@ -12,7 +13,6 @@ const ForgotPassword = () => {
     const [OTP, setOTP] = useState("");
 
     const [OTPreceived, setOTPreceived] = useState(false);
-    const [statusMessage, setStatusMessage] = useState("");
 
     const navigate = useNavigate();
 
@@ -20,8 +20,6 @@ const ForgotPassword = () => {
         e.preventDefault();
 
         setLoading(true);
-        setStatusMessage("");
-
         try {
             const response = await axios.post('https://appdev.resotechsolutions.in/onboarding/forget-password/generate-otp',
                 {
@@ -36,12 +34,26 @@ const ForgotPassword = () => {
 
             // email does not exist
             if (data.status.statusCode == 3)
-                setStatusMessage(data.status.statusMessage);
+                toast.error(data.status.statusMessage, {
+                    position: "top-center",
+                    autoClose: 3000,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    transition: Slide,
+                });
 
             // Credential correct    
             if (data.status.statusCode == 1) {
                 console.log('email sent');
-                setStatusMessage(data.status.statusMessage);
+
+                toast.success(data.status.statusMessage, {
+                    position: "top-center",
+                    autoClose: 3000,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    transition: Slide,
+                });
+
                 setOTPreceived(true);
             }
 
@@ -52,7 +64,6 @@ const ForgotPassword = () => {
 
     async function submit(e) {
         e.preventDefault();
-        setStatusMessage("");
 
         if (password === confirmPassword) {
             setLoading(true);
@@ -72,12 +83,25 @@ const ForgotPassword = () => {
 
                 // OTP does not match
                 if (data.status.statusCode == -1)
-                    setStatusMessage(`OTP does not match`);
+                    toast.error(`OTP does not match!`, {
+                        position: "top-center",
+                        autoClose: 3000,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        transition: Slide,
+                    });
 
                 // Credential correct    
                 if (data.status.statusCode == 1) {
                     console.log('password change successfully');
-                    setStatusMessage(`Password Changed login to continue`);
+
+                    toast.success(`Password Changed login to continue`, {
+                        position: "top-center",
+                        autoClose: 3000,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        transition: Slide,
+                    });
 
                     setTimeout(() => {
                         // Goto login
@@ -89,7 +113,13 @@ const ForgotPassword = () => {
                 console.log(error);
             }
         } else {
-            setStatusMessage(`Passwords does not match`);
+            toast.error('Passwords not matched!', {
+                position: "top-center",
+                autoClose: 3000,
+                closeOnClick: true,
+                pauseOnHover: true,
+                transition: Slide,
+            });
         }
     }
 
@@ -110,7 +140,7 @@ const ForgotPassword = () => {
                 <label htmlFor="inputEmailId" className="form-label">Email Id</label>
                 <input type="email" className="form-control" id="inputEmailId" value={email} onChange={(e) => setEmail(e.target.value)} required />
             </div>
-            <p className='h6 text-danger mb-3 small'>{statusMessage}</p>
+            {/* <p className='h6 text-danger mb-3 small'>{statusMessage}</p> */}
             {loading && <Spinner />}
             <Link to='/' style={{ textDecoration: 'none' }}><button className="me-3 btn btn-primary">Back</button></Link>
             <button type='submit' className="btn btn-primary">Get OTP</button>
@@ -128,13 +158,13 @@ const ForgotPassword = () => {
             <div className="mb-3">
                 <label htmlFor="inputOTP" className="form-label">Email-OTP</label>
                 <input type="text" className="form-control mb-2" id="inputOTP" value={OTP} onChange={(e) => { setOTP(e.target.value) }} required />
-                <p className="text-danger small" onClick={(e) => getOTP(e)}>Resend OTP</p>
+                <p className="text-danger small" style={{ cursor: 'pointer' }} onClick={(e) => getOTP(e)}>Resend OTP</p>
             </div>
 
             <div className="mb-3">
                 <label htmlFor="inputPassword" className="form-label">New Password</label>
                 <input type="password" className="form-control" id="inputPassword" value={password} minLength={8} onChange={(e) => setPassword(e.target.value)} required />
-                <div className="form-check">
+                <div className="form-check fw-light">
                     <input className="form-check-input" type="checkbox" onClick={() => togglePasswordVisibity('inputPassword')} />
                     <label className="form-check-label" htmlFor="flexCheckDefault">
                         <span className='small'>Show Password</span>
@@ -145,14 +175,14 @@ const ForgotPassword = () => {
             <div className="mb-3">
                 <label htmlFor="inputConfirmPassword" className="form-label">Confirm Password</label>
                 <input type="password" className="form-control" id="inputConfirmPassword" value={confirmPassword} minLength={8} onChange={(e) => setConfirmPassword(e.target.value)} required />
-                <div className="form-check">
+                <div className="form-check fw-light">
                     <input className="form-check-input" type="checkbox" onClick={() => togglePasswordVisibity('inputConfirmPassword')} />
                     <label className="form-check-label" htmlFor="flexCheckDefault">
                         <span className='small'>Show Password</span>
                     </label>
                 </div>
             </div>
-            <p className='h6 text-danger mb-3 small'>{statusMessage}</p>
+            {/* <p className='h6 text-danger mb-3 small'>{statusMessage}</p> */}
             {loading && <Spinner />}
             <button type='submit' className="btn btn-primary">Submit</button>
         </form >
