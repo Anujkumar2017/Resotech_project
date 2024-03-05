@@ -10,7 +10,7 @@ const FinancialInfoForm = (props) => {
                 return (ele.field === "TEXT_INPUT") ? (
                     <div className="mb-3">
                         <label className="form-label fw-bold">{ele.data.label}</label>
-                        <input type="text" className="form-control" maxLength={ele.data.maxLength} name={ele.data.name} placeholder={ele.data.placeholder} required={ele.data.isRequired} />
+                        <input type="text" className="form-control" maxLength={ele.data.maxLength} name={ele.data.name} placeholder={ele.data.placeHolder} required={ele.data.isRequired} />
                         <p className='text-danger small'>{ele.data.badMessage}</p>
                     </div>
                 ) : (ele.field === "INFORMATION") ? (
