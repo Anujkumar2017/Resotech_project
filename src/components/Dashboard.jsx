@@ -89,7 +89,10 @@ const Dashboard = () => {
             submitPersonalInfoForm(formData);
         else if (n == 1)
             submitEducationalInfoForm(formData);
-
+        else if (n == 5)
+            submitFinancialInfoForm(formData);
+        else
+            submitOtherForm(formData);
         document.getElementById(`form-${n}`).style.display = "none";
         document.getElementById(`form-${(n + 1) % 6}`).style.display = "block";
 
@@ -131,6 +134,64 @@ const Dashboard = () => {
         console.log(formData);
         try {
             const response = await axios.post('https://appdev.resotechsolutions.in/onboarding/update-education', formData, {
+                headers: {
+                    'token': localStorage.getItem('token')
+                }
+            });
+
+            const data = response.data;
+            console.log(data);
+
+            // Valid Token
+            if (data.status.statusCode == 1) {
+                console.log("Data Updated!");
+                toast.success(data.status.statusMessage, {
+                    position: "top-center",
+                    autoClose: 1000,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    transition: Slide,
+                });
+            }
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    async function submitOtherForm(formData) {
+        console.log(formData);
+        try {
+            const response = await axios.post('https://appdev.resotechsolutions.in/onboarding/save-document', formData, {
+                headers: {
+                    'token': localStorage.getItem('token')
+                }
+            });
+
+            const data = response.data;
+            console.log(data);
+
+            // Valid Token
+            if (data.status.statusCode == 1) {
+                console.log("Data Updated!");
+                toast.success(data.status.statusMessage, {
+                    position: "top-center",
+                    autoClose: 1000,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    transition: Slide,
+                });
+            }
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    async function submitFinancialInfoForm(formData) {
+        console.log(formData);
+        try {
+            const response = await axios.post('https://appdev.resotechsolutions.in/onboarding/update-bank', formData, {
                 headers: {
                     'token': localStorage.getItem('token')
                 }
@@ -203,7 +264,24 @@ const Dashboard = () => {
                     {aadharDetails && <AdhaarInfoForm aadharInfoRules={aadharDetails} nextForm={nextForm} prevForm={prevForm} />}
                     {agreementDetails && <AgreementInfoForm agreementInfoRules={agreementDetails} nextForm={nextForm} prevForm={prevForm} />}
                     {bankDetails && <FinancialInfoForm financialInfoRules={bankDetails} nextForm={nextForm} prevForm={prevForm} />}
+                    {(() => {
+                        'use strict'
 
+                        // Fetch all the forms we want to apply custom Bootstrap validation styles to
+                        const forms = document.querySelectorAll('.needs-validation')
+
+                        // Loop over them and prevent submission
+                        Array.from(forms).forEach(form => {
+                            form.addEventListener('submit', event => {
+                                if (!form.checkValidity()) {
+                                    event.preventDefault()
+                                    event.stopPropagation()
+                                }
+
+                                form.classList.add('was-validated')
+                            }, false)
+                        })
+                    })()}
                 </div>
             </div>
         </div >
