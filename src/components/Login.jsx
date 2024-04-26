@@ -16,9 +16,29 @@ const Login = () => {
     useEffect(() => {
         const token = localStorage.getItem('token');
         if (token) {
-            navigate('/dashboard');
+            validateToken(token);
         }
-    });
+    }, []);
+
+    async function validateToken() {
+        try {
+            const response = await axios.post('https://appdev.resotechsolutions.in/onboarding/validate-token', {},
+                {
+                    headers: {
+                        'token': localStorage.getItem('token'),
+                    }
+                }
+            );
+
+            const data = response.data;
+            console.log(data);
+
+            if (data.status.statusCode == 1) navigate('/dashboard');
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
     async function submit(e) {
         e.preventDefault();

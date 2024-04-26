@@ -19,6 +19,7 @@ const Dashboard = () => {
         if (!token) {
             navigate('/');
         }
+        validateToken(token);
         fetchData();
         fetchForm();
     }, []);
@@ -28,6 +29,26 @@ const Dashboard = () => {
     const [form, setForm] = useState({});
 
     let { personalDetails, aadharDetails, agreementDetails, bankDetails, education, marksheetDetails, panDetails } = form;
+
+    async function validateToken() {
+        try {
+            const response = await axios.post('https://appdev.resotechsolutions.in/onboarding/validate-token', {},
+                {
+                    headers: {
+                        'token': localStorage.getItem('token'),
+                    }
+                }
+            );
+
+            const data = response.data;
+            console.log(data);
+
+            if (data.status.statusCode !== 1) navigate('/');
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
 
     async function fetchForm() {
         try {
